@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const { notFound, errorHandler } = require('./middleware/errorHandler');
 
@@ -10,8 +11,11 @@ const app = express();
 // Security Middleware
 app.use(helmet());
 
-// CORS Middleware
-app.use(cors());
+// CORS Configuration - Allow frontend to connect
+app.use(cors({
+  origin: 'http://localhost:3000', // Frontend URL
+  credentials: true
+}));
 
 // Body Parser Middleware
 app.use(express.json());
@@ -26,26 +30,26 @@ if (process.env.NODE_ENV === 'development') {
 app.get('/', (req, res) => {
   res.status(200).json({
     success: true,
-    message: 'Welcome to User REST API with PostgreSQL',
-    version: '2.0.0',
-    database: 'PostgreSQL',
+    message: 'User Management System API',
+    version: '1.0.0',
     endpoints: {
-      users: '/api/users',
-      search: '/api/users/search?q=searchTerm'
+      auth: '/api/auth',
+      users: '/api/users'
     },
     documentation: {
-      'GET /api/users': 'Get all users',
-      'GET /api/users/:id': 'Get user by ID',
-      'GET /api/users/search?q=term': 'Search users by name or email',
-      'POST /api/users': 'Create new user (requires: name, email, age)',
-      'PUT /api/users/:id': 'Update user (requires: name, email, age)',
-      'PATCH /api/users/:id': 'Partial update user (optional: name, email, age)',
-      'DELETE /api/users/:id': 'Delete user'
+      'POST /api/auth/register': 'Register new user',
+      'POST /api/auth/login': 'Login user',
+      'GET /api/auth/profile': 'Get current user profile (protected)',
+      'GET /api/users': 'Get all users (protected)',
+      'GET /api/users/:id': 'Get user by ID (protected)',
+      'PUT /api/users/profile': 'Update profile (protected)',
+      'DELETE /api/users/account': 'Delete account (protected)'
     }
   });
 });
 
 // API Routes
+app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 
 // Health check endpoint
