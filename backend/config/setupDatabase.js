@@ -1,11 +1,11 @@
 const { Client } = require('pg');
+const bcrypt = require('bcryptjs');
 require('dotenv').config();
 
-// Database configuration
 const dbConfig = {
   user: process.env.DB_USER || "postgres",
   host: process.env.DB_HOST || "localhost",
-  database: process.env.DB_NAME || "user-data",
+  database: process.env.DB_NAME || "user-management",
   password: process.env.DB_PASSWORD || "123456",
   port: process.env.DB_PORT || 5432,
 };
@@ -18,19 +18,18 @@ async function setupDatabase() {
     await client.connect();
     console.log('✅ Connected to PostgreSQL!');
 
-    // Drop existing table (optional - comment out if you want to keep existing data)
     console.log('🔄 Dropping existing users table (if exists)...');
     await client.query('DROP TABLE IF EXISTS users CASCADE;');
     console.log('✅ Old table dropped');
 
-    // Create users table
     console.log('🔄 Creating users table...');
     const createTableQuery = `
-      CREATE TABLE IF NOT EXISTS users (
+      CREATE TABLE users (
         id SERIAL PRIMARY KEY,
         name VARCHAR(255) NOT NULL,
         email VARCHAR(255) NOT NULL UNIQUE,
-        age INTEGER NOT NULL CHECK (age >= 0 AND age <= 150),
+        password VARCHAR(255) NOT NULL,
+        age INTEGER CHECK (age >= 0 AND age <= 150),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
@@ -38,19 +37,24 @@ async function setupDatabase() {
     await client.query(createTableQuery);
     console.log('✅ Users table created successfully!');
 
-    // Insert sample data
-    console.log('🔄 Inserting sample data...');
+    console.log('🔄 Inserting sample users with hashed passwords...');
+    
+    // Hash passwords for sample users
+    const password1 = await bcrypt.hash('password123', 10);
+    const password2 = await bcrypt.hash('password123', 10);
+    const password3 = await bcrypt.hash('password123', 10);
+
     const insertQuery = `
-      INSERT INTO users (name, email, age) VALUES
-        ('John Doe', 'john@example.com', 30),
-        ('Jane Smith', 'jane@example.com', 25),
-        ('Bob Johnson', 'bob@example.com', 35)
+      INSERT INTO users (name, email, password, age) VALUES
+        ('John Doe', 'john@example.com', $1, 30),
+        ('Jane Smith', 'jane@example.com', $2, 25),
+        ('Bob Johnson', 'bob@example.com', $3, 35)
       ON CONFLICT (email) DO NOTHING;
     `;
-    await client.query(insertQuery);
-    console.log('✅ Sample data inserted!');
+    await client.query(insertQuery, [password1, password2, password3]);
+    console.log('✅ Sample users inserted!');
+    console.log('📧 Sample login: john@example.com / password123');
 
-    // Verify data
     const result = await client.query('SELECT COUNT(*) as count FROM users;');
     console.log(`✅ Total users in database: ${result.rows[0].count}`);
 
@@ -59,16 +63,17 @@ async function setupDatabase() {
     console.log(`   Database: ${dbConfig.database}`);
     console.log(`   Host: ${dbConfig.host}`);
     console.log(`   Port: ${dbConfig.port}`);
-    console.log(`   User: ${dbConfig.user}`);
+    console.log('\n🔐 Sample User Credentials:');
+    console.log('   Email: john@example.com');
+    console.log('   Password: password123');
     console.log('\n✨ You can now start the server with: npm start');
 
   } catch (error) {
     console.error('\n❌ Database setup failed:', error.message);
     console.error('\n💡 Troubleshooting tips:');
     console.error('   1. Make sure PostgreSQL is installed and running');
-    console.error('   2. Check if database "user-data" exists (create it if not)');
+    console.error('   2. Check if database "user-management" exists (create it if not)');
     console.error('   3. Verify credentials in .env file');
-    console.error('   4. Check if port 5432 is correct');
     process.exit(1);
   } finally {
     await client.end();
@@ -76,5 +81,4 @@ async function setupDatabase() {
   }
 }
 
-// Run the setup
 setupDatabase();

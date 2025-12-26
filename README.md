@@ -1,552 +1,875 @@
-# User REST API with PostgreSQL Database
+# 🚀 Full-Stack User Management System
 
-A professional REST API built with Node.js, Express, and PostgreSQL for managing User entities with full CRUD operations and persistent data storage.
+A modern, production-ready user management system built with React, Node.js, Express, and PostgreSQL. Features a beautiful UI/UX, JWT authentication, and complete CRUD operations.
 
-## 🌟 New Features (v2.0)
+![Version](https://img.shields.io/badge/version-3.0.0-blue.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
+![Node](https://img.shields.io/badge/node-%3E%3D16.0.0-brightgreen.svg)
+![React](https://img.shields.io/badge/react-18.2.0-blue.svg)
 
-- ✅ **PostgreSQL Database Integration** - Data persists across server restarts
-- ✅ **SQL Queries** - Direct database operations for Create, Read, Update, Delete
-- ✅ **Search Functionality** - Search users by name or email
-- ✅ **Automatic Table Creation** - Database schema setup on startup
-- ✅ **Sample Data Seeding** - Pre-populated test data
-- ✅ **Unique Email Constraint** - Database-level email uniqueness
-- ✅ **Timestamps** - Automatic created_at and updated_at fields
-- ✅ **Database Connection Pooling** - Efficient connection management
+## 📋 Table of Contents
 
-## 📋 Features
+- [Features](#-features)
+- [Tech Stack](#-tech-stack)
+- [Architecture](#-architecture)
+- [Prerequisites](#-prerequisites)
+- [Installation](#-installation)
+- [Configuration](#-configuration)
+- [Running the Application](#-running-the-application)
+- [API Documentation](#-api-documentation)
+- [Project Structure](#-project-structure)
+- [Database Schema](#-database-schema)
+- [Screenshots](#-screenshots)
+- [Testing](#-testing)
+- [Deployment](#-deployment)
+- [Contributing](#-contributing)
+- [License](#-license)
 
-- Complete CRUD operations (Create, Read, Update, Delete)
-- PostgreSQL database for persistent data storage
-- Input validation and sanitization
-- Email uniqueness enforcement (database constraint)
-- Proper error handling with meaningful messages
-- Security headers (Helmet)
-- CORS enabled
-- Request logging (Morgan)
-- RESTful API design
-- Professional MVC architecture
+## ✨ Features
 
-## 🗂️ Project Structure
+### Core Functionality
+- ✅ **User Authentication** - JWT-based secure authentication
+- ✅ **User Registration** - Create new accounts with validation
+- ✅ **User Login** - Secure login with token-based sessions
+- ✅ **Profile Management** - View and edit user profiles
+- ✅ **Password Management** - Change passwords securely
+- ✅ **Account Deletion** - Delete accounts with password confirmation
+- ✅ **User Dashboard** - View all users with search functionality
+- ✅ **User Profiles** - View detailed information about other users
+
+### UI/UX Features
+- 🎨 **Modern Design** - Beautiful gradient-based design system
+- 📱 **Fully Responsive** - Works seamlessly on all devices
+- ⚡ **Fast & Smooth** - Optimized performance with smooth animations
+- 🔒 **Secure** - Protected routes and secure authentication
+- 💅 **Professional UI** - Production-ready interface with attention to detail
+- 🎯 **User-Friendly** - Intuitive navigation and clear feedback
+- 🌈 **Consistent Theme** - Purple gradient theme throughout the app
+
+### Technical Features
+- 🔐 **JWT Authentication** - Secure token-based authentication
+- 🗄️ **PostgreSQL Database** - Robust relational database
+- 🛡️ **Input Validation** - Server and client-side validation
+- 🚨 **Error Handling** - Comprehensive error handling with user feedback
+- 📊 **RESTful API** - Clean and well-documented API endpoints
+- 🔄 **State Management** - Efficient React state management
+- 🎭 **Loading States** - Beautiful loading indicators
+- ✅ **Success Messages** - Clear success/error notifications
+
+## 🛠 Tech Stack
+
+### Frontend
+- **React 18.2.0** - UI library
+- **React Router DOM 6.x** - Client-side routing
+- **Axios** - HTTP client for API calls
+- **CSS3** - Modern styling with flexbox and grid
+
+### Backend
+- **Node.js 16+** - JavaScript runtime
+- **Express 4.x** - Web application framework
+- **PostgreSQL 14+** - Relational database
+- **JWT** - JSON Web Tokens for authentication
+- **bcrypt** - Password hashing
+- **CORS** - Cross-origin resource sharing
+- **dotenv** - Environment variable management
+
+### Development Tools
+- **Postman** - API testing
+- **pgAdmin 4** - Database management
+- **VS Code** - Code editor
+- **Git** - Version control
+
+## 🏗 Architecture
 
 ```
-user-rest-api/
-├── config/
-│   ├── database.js           # PostgreSQL connection & config
-│   └── setupDatabase.js      # Database setup script
-├── controllers/
-│   └── userController.js     # Request handlers
-├── models/
-│   └── User.js               # User model with validation
-├── routes/
-│   └── userRoutes.js         # API routes
-├── services/
-│   └── userService.js        # Business logic with SQL queries
-├── middleware/
-│   └── errorHandler.js       # Error handling middleware
-├── app.js                    # Express app configuration
-├── server.js                 # Server entry point
-├── package.json              # Dependencies
-├── .env                      # Environment variables
-├── .gitignore                # Git ignore file
-└── README.md                 # This file
+┌─────────────────────────────────────────────────────────┐
+│                    Frontend (React)                     │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐      │
+│  │   Login     │  │  Dashboard  │  │   Profile   │      │
+│  └─────────────┘  └─────────────┘  └─────────────┘      │
+│           │                │                │           │
+│           └────────────────┴────────────────┘           │
+│                         │                               │
+│                    Axios API Client                     │
+└─────────────────────────┬───────────────────────────────┘
+                          │
+                    REST API (HTTP/HTTPS)
+                          │
+┌─────────────────────────┴───────────────────────────────┐
+│                Backend (Express/Node.js)                │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐      │
+│  │    Auth     │  │    Users    │  │   Routes    │      │
+│  │ Middleware  │  │  Controller │  │   Handler   │      │
+│  └─────────────┘  └─────────────┘  └─────────────┘      │
+│                         │                               │
+│                    Database Layer                       │
+└─────────────────────────┬───────────────────────────────┘
+                          │
+┌─────────────────────────┴───────────────────────────────┐
+│              PostgreSQL Database                        │
+│  ┌─────────────────────────────────────────────┐        │
+│  │         users                               │        │
+│  │  • id (PK)                                  │        │
+│  │  • name                                     │        │
+│  │  • email (UNIQUE)                           │        │
+│  │  • password (HASHED)                        │        │
+│  │  • age                                      │        │ 
+│  │  • created_at                               │        │
+│  │  • updated_at                               │        │
+│  └─────────────────────────────────────────────┘        │
+└─────────────────────────────────────────────────────────┘
 ```
 
-## 🔧 Prerequisites
+## 📦 Prerequisites
 
 Before you begin, ensure you have the following installed:
 
-1. **Node.js** (v14 or higher)
-   - Download from: https://nodejs.org/
+- **Node.js** (v16.0.0 or higher) - [Download](https://nodejs.org/)
+- **PostgreSQL** (v14 or higher) - [Download](https://www.postgresql.org/download/)
+- **npm** or **yarn** - Comes with Node.js
+- **Git** - [Download](https://git-scm.com/)
+- **pgAdmin 4** (Optional) - Database management tool
 
-2. **PostgreSQL** (v12 or higher)
-   - **Windows**: Download from https://www.postgresql.org/download/windows/
-   - **macOS**: Use Homebrew: `brew install postgresql`
-   - **Linux**: `sudo apt-get install postgresql postgresql-contrib`
+## 🚀 Installation
 
-3. **npm** (comes with Node.js)
+### 1. Clone the Repository
 
-## 📥 Installation
-
-### Step 1: Navigate to Project Folder
 ```bash
-cd user-rest-api
+git clone https://github.com/Shubhadip2005/user-management-system.git
+cd user-management-system
 ```
 
-### Step 2: Install Dependencies
+### 2. Backend Setup
+
 ```bash
+# Navigate to backend directory
+cd backend
+
+# Install dependencies
 npm install
+
+# Create .env file
+cp .env.example .env
 ```
 
-This installs:
-- express (web framework)
-- pg (PostgreSQL client)
-- dotenv (environment variables)
-- cors (cross-origin resource sharing)
-- helmet (security)
-- morgan (logging)
-- nodemon (auto-reload for development)
-
-### Step 3: Configure PostgreSQL
-
-#### 3.1 Start PostgreSQL Service
-
-**Windows:**
-```bash
-# PostgreSQL should start automatically after installation
-# If not, start it from Services or use:
-net start postgresql-x64-14
-```
-
-**macOS:**
-```bash
-brew services start postgresql
-```
-
-**Linux:**
-```bash
-sudo service postgresql start
-```
-
-#### 3.2 Create Database
-
-Open PostgreSQL command line:
-
-**Windows:**
-```bash
-# Open SQL Shell (psql) from Start menu
-# Or use pgAdmin GUI
-```
-
-**macOS/Linux:**
-```bash
-psql -U postgres
-```
-
-Then create the database:
-```sql
-CREATE DATABASE "user-data";
-\q
-```
-
-**Using pgAdmin (GUI Method):**
-1. Open pgAdmin
-2. Right-click "Databases"
-3. Click "Create" → "Database"
-4. Name: `user-data`
-5. Click "Save"
-
-### Step 4: Configure Environment Variables
-
-The `.env` file is already configured with default values:
+**Edit `.env` file with your configuration:**
 
 ```env
-PORT=3000
+# Server Configuration
+PORT=5000
 NODE_ENV=development
 
-# PostgreSQL Configuration
-DB_USER=postgres
+# Database Configuration
 DB_HOST=localhost
-DB_NAME=user-data
-DB_PASSWORD=123456
 DB_PORT=5432
+DB_NAME=user_management
+DB_USER=postgres
+DB_PASSWORD=your_password
+
+# JWT Configuration
+JWT_SECRET=your_super_secret_jwt_key_change_this_in_production
+JWT_EXPIRE=24h
+
+# CORS Configuration
+FRONTEND_URL=http://localhost:3000
 ```
 
-**⚠️ IMPORTANT:** Update `DB_PASSWORD` if your PostgreSQL password is different!
+### 3. Database Setup
 
-### Step 5: Setup Database (Create Table & Sample Data)
+**Option A: Using pgAdmin 4**
 
-Run the database setup script:
-```bash
-npm run setup-db
-```
-
-This will:
-- Connect to PostgreSQL
-- Create the `users` table
-- Insert 3 sample users
-- Verify the setup
-
-**Expected Output:**
-```
-🔄 Connecting to PostgreSQL...
-✅ Connected to PostgreSQL!
-🔄 Creating users table...
-✅ Users table created successfully!
-🔄 Inserting sample data...
-✅ Sample data inserted!
-✅ Total users in database: 3
-🎉 Database setup completed successfully!
-```
-
-### Step 6: Start the Server
-
-**Development mode (with auto-reload):**
-```bash
-npm run dev
-```
-
-**Production mode:**
-```bash
-npm start
-```
-
-**Expected Output:**
-```
-🔄 Initializing database...
-✅ PostgreSQL Database Connected Successfully!
-📊 Database: user-data
-🏠 Host: localhost:5432
-✅ Users table ready
-
-╔════════════════════════════════════════════════════╗
-║   User REST API with PostgreSQL Started            ║
-╠════════════════════════════════════════════════════╣
-║  Environment: development                          ║
-║  Port: 3000                                        ║
-║  Database: PostgreSQL (user-data)                  ║
-║  URL: http://localhost:3000                        ║
-║  Health: http://localhost:3000/health              ║
-║  API: http://localhost:3000/api/users              ║
-╚════════════════════════════════════════════════════╝
-```
-
-### Step 7: Verify Installation
-
-Open your browser and visit: `http://localhost:3000`
-
-You should see the API welcome message!
-
-## 📡 API Endpoints
-
-### Base URL: `http://localhost:3000/api/users`
-
-| Method | Endpoint | Description | Request Body |
-|--------|----------|-------------|--------------|
-| GET | `/api/users` | Get all users | - |
-| GET | `/api/users/:id` | Get user by ID | - |
-| GET | `/api/users/search?q=term` | Search users | - |
-| POST | `/api/users` | Create new user | `{ name, email, age }` |
-| PUT | `/api/users/:id` | Update user (full) | `{ name, email, age }` |
-| PATCH | `/api/users/:id` | Update user (partial) | `{ name?, email?, age? }` |
-| DELETE | `/api/users/:id` | Delete user | - |
-
-### Database Schema
+1. Open pgAdmin 4
+2. Right-click on "Databases" → Create → Database
+3. Name: `user_management`
+4. Click "Save"
+5. Open Query Tool (Right-click on database → Query Tool)
+6. Run the following SQL:
 
 ```sql
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
-  email VARCHAR(255) NOT NULL UNIQUE,
-  age INTEGER NOT NULL CHECK (age >= 0 AND age <= 150),
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(100) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  age INTEGER NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Create index for faster email lookups
+CREATE INDEX idx_users_email ON users(email);
+
+-- Create trigger to update updated_at timestamp
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+   NEW.updated_at = CURRENT_TIMESTAMP;
+   RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+CREATE TRIGGER update_users_updated_at BEFORE UPDATE
+ON users FOR EACH ROW
+EXECUTE FUNCTION update_updated_at_column();
 ```
 
-### User Object Structure
+**Option B: Using Command Line**
 
-```json
-{
-  "id": 1,
-  "name": "John Doe",
-  "email": "john@example.com",
-  "age": 30,
-  "created_at": "2024-01-01T00:00:00.000Z",
-  "updated_at": "2024-01-01T00:00:00.000Z"
-}
-```
-
-## 🧪 API Usage Examples
-
-### 1. Get All Users
-```bash
-curl http://localhost:3000/api/users
-```
-
-**SQL Query Used:**
-```sql
-SELECT * FROM users ORDER BY id ASC;
-```
-
-### 2. Get User by ID
-```bash
-curl http://localhost:3000/api/users/1
-```
-
-**SQL Query Used:**
-```sql
-SELECT * FROM users WHERE id = $1;
-```
-
-### 3. Create New User
-```bash
-curl -X POST http://localhost:3000/api/users \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Alice Williams",
-    "email": "alice@example.com",
-    "age": 28
-  }'
-```
-
-**SQL Query Used:**
-```sql
-INSERT INTO users (name, email, age)
-VALUES ($1, $2, $3)
-RETURNING *;
-```
-
-### 4. Update User (Full - PUT)
-```bash
-curl -X PUT http://localhost:3000/api/users/1 \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "John Updated",
-    "email": "john.updated@example.com",
-    "age": 31
-  }'
-```
-
-**SQL Query Used:**
-```sql
-UPDATE users 
-SET name = $1, email = $2, age = $3, updated_at = CURRENT_TIMESTAMP
-WHERE id = $4
-RETURNING *;
-```
-
-### 5. Update User (Partial - PATCH)
-```bash
-curl -X PATCH http://localhost:3000/api/users/1 \
-  -H "Content-Type: application/json" \
-  -d '{
-    "age": 32
-  }'
-```
-
-**SQL Query Used:**
-```sql
-UPDATE users 
-SET age = $1, updated_at = CURRENT_TIMESTAMP
-WHERE id = $2
-RETURNING *;
-```
-
-### 6. Delete User
-```bash
-curl -X DELETE http://localhost:3000/api/users/1
-```
-
-**SQL Query Used:**
-```sql
-DELETE FROM users WHERE id = $1 RETURNING *;
-```
-
-### 7. Search Users
-```bash
-curl "http://localhost:3000/api/users/search?q=john"
-```
-
-**SQL Query Used:**
-```sql
-SELECT * FROM users 
-WHERE name ILIKE $1 OR email ILIKE $1
-ORDER BY id ASC;
-```
-
-## 🔍 SQL Queries Reference
-
-All SQL queries used in this API:
-
-| Operation | SQL Query |
-|-----------|-----------|
-| **Create User** | `INSERT INTO users (name, email, age) VALUES ($1, $2, $3) RETURNING *;` |
-| **Get All Users** | `SELECT * FROM users ORDER BY id ASC;` |
-| **Get User by ID** | `SELECT * FROM users WHERE id = $1;` |
-| **Update User** | `UPDATE users SET name = $1, email = $2, age = $3, updated_at = CURRENT_TIMESTAMP WHERE id = $4 RETURNING *;` |
-| **Delete User** | `DELETE FROM users WHERE id = $1 RETURNING *;` |
-| **Search Users** | `SELECT * FROM users WHERE name ILIKE $1 OR email ILIKE $1 ORDER BY id ASC;` |
-| **Count Users** | `SELECT COUNT(*) as count FROM users;` |
-
-## 🛡️ Validation Rules
-
-- **Name**: Required, must be non-empty string
-- **Email**: Required, valid email format, must be unique (enforced by database)
-- **Age**: Required, integer between 0-150
-
-## 🐛 Troubleshooting
-
-### PostgreSQL Connection Issues
-
-**Problem:** "Connection refused" or "could not connect to server"
-
-**Solutions:**
-1. Check if PostgreSQL is running:
-   ```bash
-   # Windows
-   net start postgresql-x64-14
-   
-   # macOS
-   brew services list
-   
-   # Linux
-   sudo service postgresql status
-   ```
-
-2. Verify credentials in `.env` file
-3. Check if database "user-data" exists
-4. Ensure port 5432 is not blocked by firewall
-
-### Database Doesn't Exist
-
-**Problem:** `database "user-data" does not exist`
-
-**Solution:**
 ```bash
 # Connect to PostgreSQL
 psql -U postgres
 
 # Create database
-CREATE DATABASE "user-data";
+CREATE DATABASE user_management;
 
-# Verify
-\l
+# Connect to the database
+\c user_management
 
-# Exit
+# Run the SQL commands from Option A above
+
+# Exit psql
 \q
 ```
 
-### Authentication Failed
+### 4. Frontend Setup
 
-**Problem:** `password authentication failed for user "postgres"`
-
-**Solution:**
-1. Update `DB_PASSWORD` in `.env` file with your PostgreSQL password
-2. Or reset PostgreSQL password:
-   ```sql
-   ALTER USER postgres PASSWORD '123456';
-   ```
-
-### Table Already Exists Error
-
-**Solution:**
-Run the setup script again:
 ```bash
-npm run setup-db
+# Navigate to frontend directory (from project root)
+cd ../frontend
+
+# Install dependencies
+npm install
 ```
 
-This will drop and recreate the table.
+## ⚙️ Configuration
 
-### Port Already in Use
+### Backend Configuration
 
-**Problem:** `Port 3000 already in use`
+**File: `backend/.env`**
 
-**Solution:**
-1. Change PORT in `.env` file, or
-2. Kill the process:
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `PORT` | Backend server port | `5000` |
+| `DB_HOST` | PostgreSQL host | `localhost` |
+| `DB_PORT` | PostgreSQL port | `5432` |
+| `DB_NAME` | Database name | `user_management` |
+| `DB_USER` | Database username | `postgres` |
+| `DB_PASSWORD` | Database password | `your_password` |
+| `JWT_SECRET` | Secret key for JWT | `change_this_in_production` |
+| `JWT_EXPIRE` | JWT expiration time | `24h` |
+| `FRONTEND_URL` | Frontend URL for CORS | `http://localhost:3000` |
+
+### Frontend Configuration
+
+**File: `frontend/src/api/api.js`**
+
+```javascript
+const API_URL = 'http://localhost:5000/api';
+```
+
+Update this URL if your backend is running on a different port or domain.
+
+## 🎮 Running the Application
+
+### Development Mode
+
+**Terminal 1 - Backend:**
+
+```bash
+cd backend
+npm start
+
+# Output:
+# Server running on port 5000
+# Database connected successfully
+```
+
+**Terminal 2 - Frontend:**
+
+```bash
+cd frontend
+npm start
+
+# Output:
+# Compiled successfully!
+# Local: http://localhost:3000
+```
+
+### Production Mode
+
+**Backend:**
+
+```bash
+cd backend
+npm run start:prod
+```
+
+**Frontend:**
+
+```bash
+cd frontend
+npm run build
+npm install -g serve
+serve -s build -p 3000
+```
+
+## 📚 API Documentation
+
+### Base URL
+
+```
+http://localhost:5000/api
+```
+
+### Authentication
+
+All protected routes require a JWT token in the Authorization header:
+
+```
+Authorization: Bearer <token>
+```
+
+### Endpoints
+
+#### 1. Register User
+
+**POST** `/auth/register`
+
+**Request Body:**
+```json
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "password123",
+  "age": 25
+}
+```
+
+**Response (201):**
+```json
+{
+  "success": true,
+  "message": "User registered successfully",
+  "data": {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "user": {
+      "id": 1,
+      "name": "John Doe",
+      "email": "john@example.com",
+      "age": 25,
+      "created_at": "2025-12-25T10:00:00.000Z",
+      "updated_at": "2025-12-25T10:00:00.000Z"
+    }
+  }
+}
+```
+
+#### 2. Login
+
+**POST** `/auth/login`
+
+**Request Body:**
+```json
+{
+  "email": "john@example.com",
+  "password": "password123"
+}
+```
+
+**Response (200):**
+```json
+{
+  "success": true,
+  "message": "Login successful",
+  "data": {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "user": {
+      "id": 1,
+      "name": "John Doe",
+      "email": "john@example.com",
+      "age": 25,
+      "created_at": "2025-12-25T10:00:00.000Z",
+      "updated_at": "2025-12-25T10:00:00.000Z"
+    }
+  }
+}
+```
+
+#### 3. Get All Users
+
+**GET** `/users` 🔒 *Protected*
+
+**Headers:**
+```
+Authorization: Bearer <token>
+```
+
+**Response (200):**
+```json
+{
+  "success": true,
+  "count": 2,
+  "data": [
+    {
+      "id": 1,
+      "name": "John Doe",
+      "email": "john@example.com",
+      "age": 25,
+      "created_at": "2025-12-25T10:00:00.000Z",
+      "updated_at": "2025-12-25T10:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "name": "Jane Smith",
+      "email": "jane@example.com",
+      "age": 30,
+      "created_at": "2025-12-25T11:00:00.000Z",
+      "updated_at": "2025-12-25T11:00:00.000Z"
+    }
+  ]
+}
+```
+
+#### 4. Get User by ID
+
+**GET** `/users/:id` 🔒 *Protected*
+
+**Response (200):**
+```json
+{
+  "success": true,
+  "data": {
+    "id": 1,
+    "name": "John Doe",
+    "email": "john@example.com",
+    "age": 25,
+    "created_at": "2025-12-25T10:00:00.000Z",
+    "updated_at": "2025-12-25T10:00:00.000Z"
+  }
+}
+```
+
+#### 5. Update User
+
+**PUT** `/users/:id` 🔒 *Protected*
+
+**Request Body:**
+```json
+{
+  "name": "John Updated",
+  "email": "johnupdated@example.com",
+  "age": 26
+}
+```
+
+**Response (200):**
+```json
+{
+  "success": true,
+  "message": "User updated successfully",
+  "data": {
+    "id": 1,
+    "name": "John Updated",
+    "email": "johnupdated@example.com",
+    "age": 26,
+    "created_at": "2025-12-25T10:00:00.000Z",
+    "updated_at": "2025-12-25T12:00:00.000Z"
+  }
+}
+```
+
+#### 6. Change Password
+
+**PUT** `/users/:id/password` 🔒 *Protected*
+
+**Request Body:**
+```json
+{
+  "currentPassword": "password123",
+  "newPassword": "newpassword456"
+}
+```
+
+**Response (200):**
+```json
+{
+  "success": true,
+  "message": "Password updated successfully"
+}
+```
+
+#### 7. Delete User
+
+**DELETE** `/users/:id` 🔒 *Protected*
+
+**Request Body:**
+```json
+{
+  "password": "password123"
+}
+```
+
+**Response (200):**
+```json
+{
+  "success": true,
+  "message": "User deleted successfully"
+}
+```
+
+### Error Responses
+
+**400 Bad Request:**
+```json
+{
+  "success": false,
+  "message": "Email already exists"
+}
+```
+
+**401 Unauthorized:**
+```json
+{
+  "success": false,
+  "message": "Invalid credentials"
+}
+```
+
+**403 Forbidden:**
+```json
+{
+  "success": false,
+  "message": "Not authorized to access this resource"
+}
+```
+
+**404 Not Found:**
+```json
+{
+  "success": false,
+  "message": "User not found"
+}
+```
+
+**500 Internal Server Error:**
+```json
+{
+  "success": false,
+  "message": "Server error occurred"
+}
+```
+
+## 📁 Project Structure
+
+```
+user-management-system/
+│
+├── backend/                      # Backend Node.js application
+│   ├── config/                   # Configuration files
+│   │   └── db.js                # Database connection
+│   │
+│   ├── controllers/              # Route controllers
+│   │   ├── authController.js    # Authentication logic
+│   │   └── userController.js    # User CRUD logic
+│   │
+│   ├── middleware/               # Custom middleware
+│   │   └── auth.js              # JWT authentication middleware
+│   │
+│   ├── routes/                   # API routes
+│   │   ├── auth.js              # Authentication routes
+│   │   └── users.js             # User routes
+│   │
+│   ├── .env                      # Environment variables
+│   ├── .env.example              # Environment template
+│   ├── server.js                 # Entry point
+│   └── package.json              # Backend dependencies
+│
+└── frontend/                     # Frontend React application
+    ├── public/                   # Public assets
+    │   ├── index.html           # HTML template
+    │   └── favicon.ico          # Favicon
+    │
+    ├── src/                      # Source files
+    │   ├── api/                  # API integration
+    │   │   └── api.js           # Axios configuration
+    │   │
+    │   ├── components/           # React components
+    │   │   ├── Auth/            # Authentication components
+    │   │   │   ├── Login.js
+    │   │   │   ├── Login.css
+    │   │   │   ├── Register.js
+    │   │   │   └── Register.css
+    │   │   │
+    │   │   ├── Dashboard/       # Dashboard components
+    │   │   │   ├── Dashboard.js
+    │   │   │   └── Dashboard.css
+    │   │   │
+    │   │   ├── Profile/         # Profile components
+    │   │   │   ├── Profile.js
+    │   │   │   └── Profile.css
+    │   │   │
+    │   │   ├── UserProfile/     # User profile view
+    │   │   │   ├── UserProfile.js
+    │   │   │   └── UserProfile.css
+    │   │   │
+    │   │   └── Navbar/          # Navigation bar
+    │   │       ├── Navbar.js
+    │   │       └── Navbar.css
+    │   │
+    │   ├── App.js                # Main App component
+    │   ├── App.css               # Global styles
+    │   ├── index.js              # Entry point
+    │   └── index.css             # Base styles
+    │
+    └── package.json              # Frontend dependencies
+```
+
+## 🗄 Database Schema
+
+### Users Table
+
+| Column | Type | Constraints | Description |
+|--------|------|-------------|-------------|
+| `id` | SERIAL | PRIMARY KEY | Unique user identifier |
+| `name` | VARCHAR(100) | NOT NULL | User's full name |
+| `email` | VARCHAR(100) | UNIQUE, NOT NULL | User's email address |
+| `password` | VARCHAR(255) | NOT NULL | Hashed password |
+| `age` | INTEGER | NOT NULL | User's age |
+| `created_at` | TIMESTAMP | DEFAULT NOW() | Account creation timestamp |
+| `updated_at` | TIMESTAMP | DEFAULT NOW() | Last update timestamp |
+
+**Indexes:**
+- Primary key index on `id`
+- Unique index on `email`
+- Index on `email` for faster lookups
+
+**Triggers:**
+- `update_users_updated_at` - Automatically updates `updated_at` on row update
+
+## 📸 Screenshots
+
+### Login Page
+![Login Page](frontend/public/Login_Page.png)
+*Beautiful split-screen login with gradient background*
+
+### Register Page
+![Register Page](frontend/public/Register_Page.png)
+*User-friendly registration form with validation*
+
+### Dashboard
+![Dashboard](frontend/public/Dashboard_Page.png)
+*Modern dashboard with user cards and search functionality*
+
+### Profile Page
+![Profile Page](frontend/public/Profile_Page.png)
+*Comprehensive profile management with edit capabilities*
+
+### User Profile View
+![User Profile](frontend/public/Userprofile_page.png)
+*Clean user profile view with detailed information*
+
+## 🧪 Testing
+
+### Backend Testing with Postman
+
+1. **Import Collection**
+   - Download `postman_collection.json`
+   - Import into Postman
+
+2. **Set Environment Variables**
+   - `base_url`: `http://localhost:5000`
+   - `token`: (will be set after login)
+
+3. **Test Sequence**
+   ```
+   1. POST /api/auth/register
+   2. POST /api/auth/login (save token)
+   3. GET /api/users (use token)
+   4. GET /api/users/:id (use token)
+   5. PUT /api/users/:id (use token)
+   6. PUT /api/users/:id/password (use token)
+   7. DELETE /api/users/:id (use token)
+   ```
+
+### Frontend Testing
+
+**Manual Testing Checklist:**
+
+- [ ] User Registration
+  - [ ] Valid data submission
+  - [ ] Email validation
+  - [ ] Password strength validation
+  - [ ] Duplicate email handling
+  
+- [ ] User Login
+  - [ ] Valid credentials
+  - [ ] Invalid credentials
+  - [ ] Token persistence
+  - [ ] Auto-redirect after login
+  
+- [ ] Dashboard
+  - [ ] Display all users
+  - [ ] Search functionality
+  - [ ] User card interactions
+  - [ ] View profile navigation
+  
+- [ ] Profile Management
+  - [ ] View own profile
+  - [ ] Edit profile information
+  - [ ] Change password
+  - [ ] Delete account with confirmation
+  
+- [ ] User Profile View
+  - [ ] View other user profiles
+  - [ ] Display all user information
+  - [ ] Back to dashboard navigation
+
+- [ ] Responsive Design
+  - [ ] Desktop view (1920x1080)
+  - [ ] Tablet view (768x1024)
+  - [ ] Mobile view (375x667)
+
+## 🚢 Deployment
+
+### Backend Deployment (Heroku)
+
+```bash
+# Install Heroku CLI
+# Login to Heroku
+heroku login
+
+# Create app
+heroku create your-app-name
+
+# Add PostgreSQL addon
+heroku addons:create heroku-postgresql:hobby-dev
+
+# Set environment variables
+heroku config:set JWT_SECRET=your_secret_key
+heroku config:set NODE_ENV=production
+
+# Deploy
+git push heroku main
+
+# Run migrations
+heroku pg:psql < database/schema.sql
+```
+
+### Frontend Deployment (Vercel)
+
+```bash
+# Install Vercel CLI
+npm install -g vercel
+
+# Login to Vercel
+vercel login
+
+# Deploy
+cd frontend
+vercel
+
+# Set environment variable for API URL
+# In Vercel dashboard: Settings → Environment Variables
+# Add: REACT_APP_API_URL = https://your-backend.herokuapp.com/api
+```
+
+### Environment Variables for Production
+
+**Backend (.env):**
+```env
+NODE_ENV=production
+PORT=5000
+DB_HOST=your-production-db-host
+DB_PORT=5432
+DB_NAME=your_production_db
+DB_USER=your_db_user
+DB_PASSWORD=your_secure_password
+JWT_SECRET=your_very_secure_jwt_secret_key
+JWT_EXPIRE=24h
+FRONTEND_URL=https://your-frontend-domain.com
+```
+
+**Frontend (.env):**
+```env
+REACT_APP_API_URL=https://your-backend-domain.com/api
+```
+
+## 🤝 Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. **Fork the repository**
+2. **Create a feature branch**
    ```bash
-   # Find process
-   lsof -ti:3000
-   
-   # Kill it
-   lsof -ti:3000 | xargs kill -9
+   git checkout -b feature/amazing-feature
    ```
+3. **Commit your changes**
+   ```bash
+   git commit -m 'Add some amazing feature'
+   ```
+4. **Push to the branch**
+   ```bash
+   git push origin feature/amazing-feature
+   ```
+5. **Open a Pull Request**
 
-## 🧪 Testing with Postman
+### Coding Standards
 
-Import the included `User_REST_API.postman_collection.json` file into Postman for quick testing!
+- Follow ESLint rules
+- Write meaningful commit messages
+- Add comments for complex logic
+- Update documentation for new features
+- Test before submitting PR
 
-See `POSTMAN_TESTING_GUIDE.md` for detailed testing instructions.
+## 📝 License
 
-## 📊 Database Management
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-### View Data Using psql
-```bash
-# Connect to database
-psql -U postgres -d user-data
+## 👥 Authors
 
-# View all users
-SELECT * FROM users;
+- **Your Name** - *Initial work* - [Shubhadip2005](https://github.com/Shubhadip2005)
 
-# Count users
-SELECT COUNT(*) FROM users;
+## 🙏 Acknowledgments
 
-# Exit
-\q
-```
+- React documentation
+- Express.js community
+- PostgreSQL documentation
+- All contributors who helped improve this project
 
-### View Data Using pgAdmin
-1. Open pgAdmin
-2. Navigate to: Servers → PostgreSQL → Databases → user-data → Schemas → public → Tables → users
-3. Right-click on "users" → View/Edit Data → All Rows
+## 📧 Contact
 
-### Backup Database
-```bash
-pg_dump -U postgres user-data > backup.sql
-```
-
-### Restore Database
-```bash
-psql -U postgres user-data < backup.sql
-```
-
-## 🚀 Differences from In-Memory Version
-
-| Feature | In-Memory (v1.0) | PostgreSQL (v2.0) |
-|---------|------------------|-------------------|
-| Data Persistence | ❌ Lost on restart | ✅ Permanent storage |
-| Database | JavaScript Map | PostgreSQL |
-| Queries | Array methods | SQL queries |
-| Email Uniqueness | App-level check | Database constraint |
-| Timestamps | JavaScript Date | PostgreSQL TIMESTAMP |
-| Search | Not available | ✅ ILIKE search |
-| Scalability | Limited | Production-ready |
-
-## 📚 Technologies Used
-
-- **Node.js** - JavaScript runtime
-- **Express.js** - Web framework
-- **PostgreSQL** - Relational database
-- **pg** - PostgreSQL client for Node.js
-- **dotenv** - Environment variables
-- **cors** - Cross-origin resource sharing
-- **helmet** - Security headers
-- **morgan** - HTTP request logger
-
-## 🎓 Key Learning Points
-
-This project demonstrates:
-- PostgreSQL database integration with Node.js
-- SQL query writing (INSERT, SELECT, UPDATE, DELETE)
-- Database schema design
-- Parameterized queries (SQL injection prevention)
-- Database constraints (UNIQUE, CHECK)
-- Connection pooling
-- Error handling with databases
-- Async/await patterns
-- RESTful API with persistent storage
+- **Email**: shubhadipdas733@gmail.com
+- **LinkedIn**: [Shubhadip Das](https://linkedin.com/in/shubhadip-das-6040052a7)
+- **GitHub**: [Shubhadip2005](https://github.com/Shubhadip2005)
 
 ## 🔮 Future Enhancements
 
-- [ ] Add user authentication (JWT)
-- [ ] Implement pagination
-- [ ] Add filtering and sorting options
-- [ ] Create database indexes for performance
-- [ ] Add connection pooling
-- [ ] Implement database migrations
-- [ ] Add unit and integration tests
-- [ ] Add API rate limiting
-- [ ] Generate API documentation (Swagger)
-- [ ] Add user roles and permissions
+- [ ] Email verification
+- [ ] Password reset functionality
+- [ ] Profile picture upload
+- [ ] User roles and permissions
+- [ ] Activity logs
+- [ ] Social media authentication
+- [ ] Two-factor authentication
+- [ ] Advanced search filters
+- [ ] Export user data
+- [ ] Dark mode toggle
+- [ ] Internationalization (i18n)
+- [ ] Real-time notifications
+- [ ] User analytics dashboard
 
-## 📄 License
+## 📊 Project Status
 
-ISC
-
-## 👨‍💻 Author
-
-Shubhadip Das
+**Current Version:** 3.0.0  
+**Status:** ✅ Production Ready  
+**Last Updated:** December 25, 2025
 
 ---
 
-**Happy Coding with PostgreSQL! 🚀**
+<div align="center">
+
+**⭐ Star this repository if you found it helpful!**
+
+Made with ❤️ by [Shubhadip Das](https://github.com/Shubhadip2005)
+
+</div>

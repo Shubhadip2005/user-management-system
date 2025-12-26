@@ -1,4 +1,3 @@
-// 404 Not Found Middleware
 const notFound = (req, res, next) => {
   res.status(404).json({
     success: false,
@@ -7,7 +6,6 @@ const notFound = (req, res, next) => {
   });
 };
 
-// Global Error Handler
 const errorHandler = (err, req, res, next) => {
   console.error(err.stack);
 
@@ -19,14 +17,7 @@ const errorHandler = (err, req, res, next) => {
   });
 };
 
-// Request Logger Middleware (custom)
-const requestLogger = (req, res, next) => {
-  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
-  next();
-};
-
 module.exports = {
   notFound,
-  errorHandler,
-  requestLogger
+  errorHandler
 };
